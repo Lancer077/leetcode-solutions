@@ -8,6 +8,9 @@ I unfortunately did not do this but still came out with a fairly impressive resu
 I am very pleased with myself as this is the type of problem I would have previously skipped for it's difficulty and tedium, but sticking with it I gained a new tool of learning how to use
   a list as a stack and queue at the same time. Stack was for collision, queue was for the result.
 Who would have thought the Leetcode 75 study plan, designed for helping people learn to code better, would have done exactly that?
+
+And yes, I originally picked this one because it had a cool name, that is one of the most important things in choosing a good leetcode problem. Nobody wants to solve something titled 
+  Most-Consecutive-Letter, they want to solve Asteroid-Collision
 */
 
 class Solution {
