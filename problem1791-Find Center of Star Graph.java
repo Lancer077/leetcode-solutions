@@ -1,4 +1,5 @@
 /*
+Leetcode's easiest daily problem - 6/27/2024
 https://leetcode.com/problems/find-center-of-star-graph/description/
 https://leetcode.com/problems/find-center-of-star-graph/submissions/1302163161/
 
