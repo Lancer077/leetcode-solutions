@@ -8,6 +8,13 @@ I used to really like linked lists but when doing leetcode it feels like I spend
 
 10 points closer to getting that hat.
 
+EDIT:
+
+https://leetcode.com/problems/find-the-minimum-and-maximum-number-of-nodes-between-critical-points/submissions/1310562563
+Afterwards I realized it would not be super hard to prevent doing two loops and also avoid using a slow java list.
+I ended up with this, 4ms runtime, beat or tied with 100% of submissions, and it felt pretty darn good.
+I rarely write code on my first try, often seeing the first attempt as something to learn from more so than a finished product, and this definitely was true here.
+
 */
 
 /**
@@ -23,58 +30,41 @@ I used to really like linked lists but when doing leetcode it feels like I spend
 class Solution {
     public int[] nodesBetweenCriticalPoints(ListNode head) {
 
-        List<Integer> criticalPoints = new ArrayList<Integer>();
-
-        //handle edge cases
+        //edge case handling
         int[] arr = {-1, -1};
-        if(head == null){return arr;} //if we have 1 or 2 elements in the list
-        if(head.next == null){return arr;} //return less than 2 critical points
+        if(head == null) { return arr; }
+        if(head.next == null) { return arr; }
+        if(head.next.next == null) { return arr; }
 
-
-        //the first and last nodes in the list cannot be critical points
         ListNode prev = head;
-        ListNode curNode = prev.next; //so curNode is the second element in the list
+        ListNode curNode = prev.next;
         ListNode next = curNode.next;
 
-        int index = 1; //starting at second node, technically doesn't matter because we are only looking for the difference
+        int firstCriticalPoint = -1;
+        int minDiff = Integer.MAX_VALUE;
+        int prevCriticalPoint = -1;
+        int index = 1;
+        int pointCounter = 0;
         while(next != null){
-            if(curNode.val > next.val && curNode.val > prev.val){
-                criticalPoints.add(index);
+            if((curNode.val > next.val && curNode.val > prev.val) || (curNode.val < next.val && curNode.val < prev.val)){ //check for critical point
+                if(firstCriticalPoint == -1) { firstCriticalPoint = index; } //if first critical point not yet assigned, assign it
+                if(prevCriticalPoint != -1){
+                    minDiff = Math.min(minDiff, index - prevCriticalPoint);
+                }
+                prevCriticalPoint = index;
+                pointCounter++;
             }
-            else if(curNode.val < next.val && curNode.val < prev.val){
-                criticalPoints.add(index);
-            }
-            //increment everything to the next locations
+            index++;
             prev = curNode;
             curNode = next;
-            next = next.next;
-            index++;
-        }
-        
-        //grab the size
-        int size = criticalPoints.size();
-
-        //if we have 0 or 1 critical points, then we return -1, -1
-        if(size < 2){
-            return arr;
-        }
-        
-        //get the difference if it exists
-        int minDiff = criticalPoints.get(1) - criticalPoints.get(0);
-        if(size == 2){ //if we have just two critical points, then the max and min are the same
-            arr[0] = minDiff;
-            arr[1] = minDiff;
-            return arr;
+            next = next.next; // I hate this line with a burning passion
         }
 
-        arr[1] = criticalPoints.get(size-1) - criticalPoints.get(0); //get the max and put it in the array
-        for(int i = 1; i < size-1; i++){
-            int curDiff = criticalPoints.get(i+1) - criticalPoints.get(i); //get the current difference
-            minDiff = Math.min(curDiff, minDiff); //update minDiff
-        }
-        arr[0] = minDiff; //add minDiff to the return array
+        if(pointCounter < 2) { return arr; }
+        arr[0] = minDiff;
+        arr[1] = prevCriticalPoint - firstCriticalPoint;
 
         return arr;
-
+        
     }
 }
